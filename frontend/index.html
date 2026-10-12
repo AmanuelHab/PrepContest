@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PrepContest for Competetive Programmers</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: antiquewhite;
+        }
+        h1{
+            margin: 20px;
+            border-bottom: 2px solid black;
+            border-radius: 2px;
+            display: inline-block;
+        }
+        .input-handler {
+            background-color: #fff;
+            border: 2px solid black;
+            border-radius: 20px;
+            margin: auto 20px ;
+            padding: 10px;
+        }
+        form{
+            display: block;
+        }
+        label{
+            display: block;
+        }
+        .inline-control{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        input{
+            min-height: 45px;
+            padding: 10px 12px;
+            height: auto;
+            width: 100%;
+            border-radius: 6px;
+        }
+        button{
+            background-color: #9e9;
+            width: 30%;
+            min-height: 45px;
+        }
+        .chip-board{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>PrepContest</h1>
+    <main>
+        <div class="input-handler">
+            <form class="handle-form">
+                <label for="handle-input">Handle</label>
+                <div class="inline-control">
+                    <input type="text" id="handle-input" placeholder="tourist...">
+                    <button type="submit" id="add-button">Add</button>
+                </div>
+            </form>
+            <div class="chip-board" id="handles" aria-live="polite"></div>
+        </div>
+
+
+    </main>
+    <script>
+        const addButton = document.getElementById("add-button");
+        addButton.addEventListener('onclick', () =>{
+
+        });
+    </script>
+</body>
+</html>
