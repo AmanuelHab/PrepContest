@@ -3,9 +3,9 @@ export const checkUser = async(req, res) =>{
     const url = `https://codeforces.com/api/user.info?handle=${handle}`;
     const result = await fetch(url);
     if (result.status === "OK"){
-        return res.json({message: "YES"});
+        return res.status(200).json({message: "YES"});
     }
-    res.json({message: "NO"});
+    res.status(404).json({message: "NO"});
 }
 
 const findSubmissions = async(handle) =>{
