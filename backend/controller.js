@@ -1,8 +1,9 @@
 export const checkUser = async(req, res) =>{
-    const handle = req.body.handle;
-    const url = `https://codeforces.com/api/user.info?handle=${handle}`;
+    const handle = req.params.handle;
+    const url = `https://codeforces.com/api/user.info?handles=${handle}`;
     const result = await fetch(url);
-    if (result.status === "OK"){
+    
+    if (result.ok){
         return res.status(200).json({message: "YES"});
     }
     res.status(404).json({message: "NO"});

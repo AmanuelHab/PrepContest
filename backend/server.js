@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-// import router from "./router.js";
+import router from "./router.js";
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +16,8 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // parse JSON from comming requests
 app.use(express.json());
+
+app.use('/api', router);
 
 app.get('/health', (req, res) =>{
     res.json({message: "OK"});

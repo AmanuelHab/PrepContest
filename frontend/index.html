@@ -10,8 +10,11 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
             background-color: antiquewhite;
+        }
+        main{
+            max-width: 1000px;
         }
         h1{
             margin: 20px;
@@ -49,8 +52,22 @@
             width: 30%;
             min-height: 45px;
         }
-        .chip-board{
+        .handle-board{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10%;
             border: 1px solid black;
+        }
+        .handles{
+            width: 20%;
+            border: 1pt solid black;
+            border-radius: 15%;
+            padding: 1%;
+            margin: 1%;
+            text-align: center;
+        }
+        .hidden{
+            display: none;
         }
     </style>
 </head>
@@ -58,14 +75,14 @@
     <h1>PrepContest</h1>
     <main>
         <div class="input-handler">
-            <form class="handle-form">
+            <form id="handle-form">
                 <label for="handle-input">Handle</label>
                 <div class="inline-control">
                     <input type="text" id="handle-input" placeholder="tourist...">
-                    <button type="submit" id="add-button">Add</button>
+                    <button type="button" id="add-button">Add</button>
                 </div>
             </form>
-            <div class="chip-board" id="handles" aria-live="polite"></div>
+            <div class="handle-board" id="handles" aria-live="polite"></div>
         </div>
         <div id="error" class="notice error hidden"></div>
         <div id="loading" class="notice loading hidden">Loading...</div>
