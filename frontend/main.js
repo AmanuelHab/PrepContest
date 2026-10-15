@@ -103,7 +103,9 @@ generateButton.addEventListener('click', async ()=>{
     if(validateInputs()){
         const result = await getProblems();
         hideLoading();
-        renderProblems(result);
+        if(result){
+            renderProblems(result);
+        }
     }
 })
 

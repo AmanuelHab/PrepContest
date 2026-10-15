@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import router from "./router.js";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ||3000;
 
 // import.meta.url provides the absolute URL of the current ES module life.
 const file = fileURLToPath(import.meta.url);
