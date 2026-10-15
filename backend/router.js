@@ -1,9 +1,9 @@
 import express from "express";
-import { checkUser } from "./controller.js";
+import { checkUser, getProblems } from "./controller.js";
 
 const router = express.Router();
 
 router.get('/check/:handle', checkUser);
-// router.get('/find_problems');
+router.post('/get_problems', getProblems);
 
 export default router;
