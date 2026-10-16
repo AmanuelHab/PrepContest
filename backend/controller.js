@@ -1,29 +1,49 @@
 export const checkUser = async(req, res) =>{
-    const handle = req.params.handle;
-    const url = `https://codeforces.com/api/user.info?handles=${encodeURIComponent(handle)}`;
-    const result = await fetch(url).then((response) => response.json());
-    
-    if (result.status === 'OK'){
-        return res.status(200).json({message: "YES"});
+    try{
+        const handle = req.params.handle;
+        const url = `https://codeforces.com/api/user.info?handles=${encodeURIComponent(handle)}`;
+        const response = await fetch(url);
+        
+        if (!response.ok){
+            if (response.status === 400){
+                    return res.status(404).json({message: "User not found."});
+            }
+            return res.status(502).json({message: "Bad response from Codeforces API."});
+        }
+
+        const result = await response.json();
+        return res.status(200).json({message: "User found.", data: result.result[0]});
+    }catch(error){
+        return res.status(502).json({message: "Failed to verify Codeforces user."});
     }
-    res.status(404).json({message: "NO"});
 }
 
 const findSolvedProblems = async(handle) =>{
-    const url = `https://codeforces.com/api/user.status?handle=${encodeURIComponent(handle)}`;
-    const result = await fetch(url).then((response) => response.json());
-
-    const submissions = result.result;
-    const solvedProblems = new Set();
-
-    for (const sub of submissions){
-        if(sub.verdict === "OK"){
-            const problem = sub.problem; 
-            const pID = `${problem.contestId}_${problem.index}`;
-            solvedProblems.add(pID);
+    try{
+        const url = `https://codeforces.com/api/user.status?handle=${encodeURIComponent(handle)}`;
+        const response = await fetch(url);
+        if (!response.ok){
+            throw new Error("Error: Failed to fetch submissions")
         }
+        const data = await response.json();
+
+        if (data.status !== 'OK'){
+            throw new Error(`Error: Codeforces API returned status "${data.status}" for handle "${handle}"`);
+        }
+        const submissions = data.result;
+        const solvedProblems = new Set();
+
+        for (const sub of submissions){
+            if(sub.verdict === "OK"){
+                const problem = sub.problem; 
+                const pID = `${problem.contestId}_${problem.index}`;
+                solvedProblems.add(pID);
+            }
+        }
+        return solvedProblems;
+    }catch(error){
+        throw new Error('Cannot connect to Codeforces API');
     }
-    return solvedProblems;
 }
 const getProblemSet = async() =>{
     const url = 'https://codeforces.com/api/problemset.problems';
@@ -39,8 +59,12 @@ const getProblemSet = async() =>{
 }
 
 function getRandomProblems(arr, count){
-    const shuffled = arr.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(0, count);
 }
 
 export const getProblems = async(req, res) =>{
@@ -55,10 +79,14 @@ export const getProblems = async(req, res) =>{
     const problemSet = await getProblemSet();
     const allSolvedProblems = new Set();
     for(const handle of handles){
-        const sub = await findSolvedProblems(handle);
-        sub.forEach(element => {
-            allSolvedProblems.add(element);
-        });
+        try{
+            const sub = await findSolvedProblems(handle);
+            sub.forEach(element => {
+                allSolvedProblems.add(element);
+            });
+        }catch(error){
+            return res.json({error:error.message});
+        }
     }
     // Remove the solved ones
     allSolvedProblems.forEach((sub) =>{

@@ -23,6 +23,20 @@ app.get('/health', (req, res) =>{
     res.json({message: "OK"});
 });
 
+// Fallback for unmatched API routes
+app.use('/api', (req, res) => {
+    res.status(404).json({ message: "API endpoint not found." });
+});
+
+// Global error handling middleware
+app.use((err, req, res, next) => {
+    console.error("Global error handler caught:", err);
+    const statusCode = err.status || err.statusCode || 500;
+    res.status(statusCode).json({
+        message: err.message || "Internal server error"
+    });
+});
+
 app.listen(PORT, () =>{
     console.log(`Server running on http://localhost:${PORT}`);
 });
